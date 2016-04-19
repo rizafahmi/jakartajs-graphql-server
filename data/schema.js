@@ -1,8 +1,11 @@
 import {
   GraphQLSchema,
   GraphQLObjectType,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLString
 } from 'graphql'
+
+let counter = 42
 
 let schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -10,12 +13,27 @@ let schema = new GraphQLSchema({
     fields: () => ({
       counter: {
         type: GraphQLInt,
-        resolve: () => 42
+        description: "An integer counter",
+        resolve: () => counter
+      },
+      message: {
+        type: GraphQLString,
+        description: "Say hello to GraphQL server",
+        resolve: () => "Hello, GraphQL!"
+      }
+    })
+  }),
+
+  mutation: new GraphQLObjectType({
+    name: 'Mutasi',
+    fields: () => ({
+      incrementCounter: {
+        type: GraphQLInt,
+        resolve: () => ++counter
+
       }
     })
   })
-
-  // mutation: ...
 })
 
 
