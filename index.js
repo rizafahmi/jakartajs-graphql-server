@@ -1,4 +1,6 @@
 import express from 'express'
+import schema from './data/schema.js'
+import GraphQLHTTP from 'express-graphql'
 
 let app = express()
 
