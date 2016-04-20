@@ -1,6 +1,7 @@
 import express from 'express'
 import schema from './data/schema.js'
 import GraphQLHTTP from 'express-graphql'
+import {graphql} from 'graphql'
 
 var MongoClient = require('mongodb').MongoClient
 
@@ -14,7 +15,19 @@ MongoClient.connect(url, (err, database) => {
 
   db = database
   app.get('/', (req, res) => {
-    res.send("Hello, program")
+    var query = "{links{_id,title,url}}"
+
+    var title
+    graphql(schema(db), query).then(result => {
+
+      for(var i=0; i<result.data.links.length; i++) {
+        title = result.data.links[i].title
+        url = result.data.links[i].url
+      }
+      res.send(`<a href="${url}">${title}</a>`)
+
+    })
+
   })
 
   app.get('/seed', (req, res) => {
