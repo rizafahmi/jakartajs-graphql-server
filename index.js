@@ -17,9 +17,14 @@ MongoClient.connect(url, (err, database) => {
     res.send("Hello, program")
   })
 
+  app.get('/seed', (req, res) => {
+    db.collection('links').insert({title: "GraphQL Intro", url: "https://medium.com/apollo-stack/the-basics-of-graphql-in-5-links-9e1dc4cac055#.et3len8xr"})
+    res.send("Seeding the db...")
+  })
+
   app.use('/graphql', GraphQLHTTP({
-    schema,
-    graphiql: true
+    schema: schema(db),
+    graphiql: false
   }))
 
   app.listen(3000, () => {
